@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=BitBloom
+Comment=A Cyber-Zen Puzzle Game
+Exec="/home/nurcan/JUEGO UNIC/launch.sh"
+Icon="/home/nurcan/JUEGO UNIC/public/nodes.png"
+Terminal=false
+Type=Application
+Categories=Game;

@@ -1,7 +1,7 @@
 {
   "name": "juego-unic",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The Infinite Garden - Professional Edition. A procedural cyber-zen simulation.",
   "author": "BitBloom Dev",
   "type": "module",

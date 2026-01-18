@@ -183,7 +183,7 @@ export class UIManager {
         modal.className = 'tutorial-overlay';
         modal.innerHTML = `
             <div class="tutorial-card help-modal" style="width: 600px; max-width: 90vw;">
-                <h2 style="border-bottom: 2px solid #0ff; padding-bottom: 10px; margin-bottom: 20px;">SYSTEM MANUAL v1.0.2</h2>
+                <h2 style="border-bottom: 2px solid #0ff; padding-bottom: 10px; margin-bottom: 20px;">SYSTEM MANUAL v1.0.3</h2>
                 
                 <div class="guide-content" style="text-align: left; max-height: 50vh; overflow-y: auto; padding-right: 10px;">
                     

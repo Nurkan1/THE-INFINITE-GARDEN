@@ -256,18 +256,18 @@ export class Grid {
             }
         }
 
-        // Draw Nodes
+        // Draw Connections (Background Layer)
+        for (const connection of this.connections) {
+            connection.draw(ctx, this, this.cellSize);
+        }
+
+        // Draw Nodes (Foreground Layer)
         for (const node of this.nodes.values()) {
             const screenPos = this.gridToScreen(node.gridX, node.gridY);
             // Center the node
             const cx = screenPos.x + this.cellSize / 2;
             const cy = screenPos.y + this.cellSize / 2;
             node.draw(ctx, cx, cy, this.cellSize);
-        }
-
-        // Draw Connections
-        for (const connection of this.connections) {
-            connection.draw(ctx, this, this.cellSize);
         }
     }
 }

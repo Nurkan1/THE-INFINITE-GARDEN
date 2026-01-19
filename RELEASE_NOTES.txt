@@ -1,3 +1,24 @@
+THE INFINITE GARDEN - RELEASE NOTES
+===================================
+Version: 1.1.0 (Bio-Data Update)
+Date: 2026-01-19
+
+NEW FEATURES:
+-------------
+1. Bio-Data Inspector:
+   - A professional Sci-Fi HUD panel to analyze your garden.
+   - Click the "Eye" icon to toggle Inspector Mode.
+   - Click on any Flower (Output Node) to view real-time DNA data.
+   - Displays Hue, Tech/Alien/Chaos traits, and Growth progress.
+
+2. UI Improvements:
+   - Enhanced Help Modal with responsive design for smaller screens.
+   - Fixed layout issues and added version information.
+
+3. System:
+   - Optimized build process for Linux and Windows.
+
+____________________________________________________________________
 # v1.0.4: Platform Credits & Final Polish 🌸✨
 
 "The Infinite Garden" evolves into a truly universal ecosystem. This update unlocks the full potential of the logic gates, turning them into genetic modifiers that mutate the flora into "Tech" or "Alien" species.

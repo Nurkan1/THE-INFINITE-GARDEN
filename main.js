@@ -267,6 +267,35 @@ canvasManager.canvas.addEventListener('click', (e) => {
     }
 });
 
+// Double-click handler for Bio-Data Inspector
+canvasManager.canvas.addEventListener('dblclick', (e) => {
+    if (!uiManager.inspectorMode) return;
+
+    const rect = canvasManager.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const gridPos = grid.screenToGrid(x, y);
+    const existingNode = grid.getNode(gridPos.x, gridPos.y);
+
+    if (existingNode) {
+        let bioData = {};
+        if (existingNode.type === 'output') {
+            bioData = existingNode.getBioData();
+        } else {
+            bioData = {
+                type: existingNode.type === 'source' ? 'SOURCE CORE' : 'LOGIC GATE',
+                growth: 0,
+                maxGrowth: 100,
+                dna: { hue: 180, tech: 0, alien: 0, chaos: 0, symmetry: 4, spikes: 0 }
+            };
+        }
+
+        uiManager.showInspector(bioData);
+        audioManager.playArriveSound();
+        particleSystem.emit(x, y, '#0ff', 15);
+    }
+});
+
 // Right click to remove
 canvasManager.canvas.addEventListener('contextmenu', (e) => {
     e.preventDefault(); // Stop browser menu

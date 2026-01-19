@@ -498,3 +498,127 @@ html {
     background: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 20px #fff;
 }
+
+/* Bio-Data Inspector */
+.inspector-panel {
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    width: 250px;
+    pointer-events: auto;
+    background: rgba(5, 10, 20, 0.9);
+    border: 1px solid #0ff;
+    border-radius: 8px;
+    padding: 0;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    z-index: 2000;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.inspector-panel.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(20px);
+}
+
+.inspector-header {
+    background: rgba(0, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-bottom: 1px solid #0ff;
+}
+
+.inspector-header h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #0ff;
+    letter-spacing: 1px;
+}
+
+.scanning-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #0ff, transparent);
+    width: 100%;
+    margin-top: 5px;
+    animation: scan 2s linear infinite;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.inspector-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.data-row .label {
+    color: #888;
+}
+
+.data-row .value {
+    color: #fff;
+    font-weight: bold;
+}
+
+.progress-bar {
+    width: 100px;
+    height: 6px;
+    background: #222;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar .fill {
+    height: 100%;
+    background: #0f0;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.dna-block {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+}
+
+.dna-block h4 {
+    margin: 0 0 5px 0;
+    font-size: 0.7rem;
+    color: #0ff;
+    opacity: 0.8;
+}
+
+.dna-block pre {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #0f0;
+    line-height: 1.4;
+    white-space: pre-wrap;
+}
+
+/* Active State for Help/Inspector Buttons */
+.help-btn.active {
+    color: #0ff;
+    text-shadow: 0 0 10px #0ff;
+    border-color: #0ff;
+    background: rgba(0, 255, 255, 0.2);
+}

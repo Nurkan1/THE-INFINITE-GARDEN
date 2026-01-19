@@ -407,6 +407,22 @@ export class OutputNode extends Node {
         }));
     }
 
+    getBioData() {
+        return {
+            type: 'FLORA (Output)',
+            growth: this.growthLevel,
+            maxGrowth: this.maxGrowth,
+            dna: {
+                hue: Math.floor(this.dna.hue),
+                tech: this.dna.tech.toFixed(2),
+                alien: this.dna.alien.toFixed(2),
+                chaos: this.dna.chaos.toFixed(2),
+                symmetry: this.dna.symmetry,
+                spikes: this.dna.spikiness.toFixed(2)
+            }
+        };
+    }
+
     draw(ctx, screenX, screenY, size) {
         const time = performance.now() / 1000;
         const breath = 1 + Math.sin(time * 3 + this.gridX) * 0.08;

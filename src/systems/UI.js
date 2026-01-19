@@ -40,7 +40,8 @@ export class UIManager {
                     <div id="system-iq" class="system-iq">System IQ: 0</div>
                     
                     <div class="hud-controls-row">
-                        <button id="help-btn" class="help-btn">?</button>
+                        <button id="help-btn" class="help-btn" title="Help">?</button>
+                        <button id="inspect-btn" class="help-btn" title="Bio-Data Inspector">👁️</button>
                         <button id="clear-btn">Clear Grid</button>
                     </div>
 
@@ -58,9 +59,39 @@ export class UIManager {
             </div>
         `;
         this.uiLayer.appendChild(this.hud);
+        this.setupInspector();
 
         this.pinned = true; // Default state
+        this.inspectorMode = false;
         this.attachListeners();
+    }
+
+    setupInspector() {
+        this.inspector = document.createElement('div');
+        this.inspector.className = 'inspector-panel hidden';
+        this.inspector.innerHTML = `
+            <div class="inspector-header">
+                <h3>BIO-DATA ANALYZER</h3>
+                <div class="scanning-line"></div>
+            </div>
+            <div class="inspector-content">
+                <div class="data-row">
+                    <span class="label">SPECIES:</span>
+                    <span id="insp-type" class="value">UNKNOWN</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">GROWTH:</span>
+                    <div class="progress-bar">
+                        <div id="insp-growth-bar" class="fill"></div>
+                    </div>
+                </div>
+                <div class="dna-block">
+                    <h4>GENETIC SEQUENCE</h4>
+                    <pre id="insp-dna">No Signal...</pre>
+                </div>
+            </div>
+        `;
+        this.uiLayer.appendChild(this.inspector);
     }
 
     attachListeners() {
@@ -103,6 +134,28 @@ export class UIManager {
 
         document.getElementById('help-btn').addEventListener('click', () => {
             this.showHelpModal();
+        });
+
+        const inspectBtn = document.getElementById('inspect-btn');
+        inspectBtn.addEventListener('click', () => {
+            this.inspectorMode = !this.inspectorMode;
+            console.log('UI: Toggle Inspector Mode:', this.inspectorMode);
+            inspectBtn.classList.toggle('active');
+
+            // Notify active tool to clear
+            if (this.inspectorMode) {
+                window.dispatchEvent(new CustomEvent('tool-change', { detail: { tool: 'inspector' } }));
+                document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+
+                // Show immediately in "standby" mode
+                this.inspector.classList.remove('hidden');
+                document.getElementById('insp-type').textContent = "SCANNING...";
+                document.getElementById('insp-type').style.color = "#0ff";
+                document.getElementById('insp-dna').textContent = "Select a FLOWER to analyze...";
+                document.getElementById('insp-growth-bar').style.width = '0%';
+            } else {
+                this.inspector.classList.add('hidden');
+            }
         });
 
         const toolBtns = this.hud.querySelectorAll('.tool-btn');
@@ -215,10 +268,10 @@ export class UIManager {
         const modal = document.createElement('div');
         modal.className = 'tutorial-overlay';
         modal.innerHTML = `
-            <div class="tutorial-card help-modal" style="width: 600px; max-width: 90vw;">
-                <h2 style="border-bottom: 2px solid #0ff; padding-bottom: 10px; margin-bottom: 20px;">SYSTEM MANUAL v1.0.3</h2>
+            <div class="tutorial-card help-modal" style="width: 600px; max-width: 90vw; display: flex; flex-direction: column; max-height: 90vh;">
+                <h2 style="border-bottom: 2px solid #0ff; padding-bottom: 10px; margin-bottom: 20px; flex-shrink: 0;">SYSTEM MANUAL v1.1.0</h2>
                 
-                <div class="guide-content" style="text-align: left; max-height: 50vh; overflow-y: auto; padding-right: 10px;">
+                <div class="guide-content" style="text-align: left; overflow-y: auto; padding-right: 15px; flex-grow: 1;">
                     
                     <h3 style="color: #0ff; margin-top: 10px;">🎮 Control Interface</h3>
                     <ul style="list-style: none; padding: 0;">
@@ -229,6 +282,12 @@ export class UIManager {
                         <li style="margin-bottom: 8px;"><strong>Ctrl + B</strong>: Cycle Connection Visualization (Organic / Tech / Sine / Chaos).</li>
                         <li style="margin-bottom: 8px;"><strong>Right Click Object</strong>: Prune/Delete.</li>
                     </ul>
+
+                    <h3 style="color: #fff; margin-top: 20px;">👁️ Bio-Data Inspector</h3>
+                    <p style="font-size: 0.9em; opacity: 0.8;">
+                        Activate the <strong>Inspector Mode</strong> (Eye Icon) to view real-time genetic data. 
+                        Click on any <strong>Flower (Output Node)</strong> to analyze its DNA sequence, growth progress, and mutation traits.
+                    </p>
 
                     <h3 style="color: #fa0; margin-top: 20px;">🧬 Xenobiology</h3>
                     <p style="font-size: 0.9em; opacity: 0.8;">
@@ -245,7 +304,7 @@ export class UIManager {
                     </p>
                 </div>
 
-                <div class="modal-actions" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
+                <div class="modal-actions" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px; flex-shrink: 0;">
                     <div style="font-size: 0.8em; color: #888; margin-bottom: 15px;">
                         <p><strong>Supported Platforms:</strong> Kali Linux (AppImage) • Windows 10/11 (Portable)</p>
                         <p>Developed with ❤️ by <strong>Nurcan Kerim</strong></p>
@@ -267,6 +326,34 @@ export class UIManager {
         });
     }
 
+    showInspector(data) {
+        console.log('UI: showInspector called', data);
+        if (!this.inspectorMode) {
+            console.log('UI: Inspector Mode OFF, aborting');
+            return;
+        }
+
+        console.log('UI: Removing hidden class');
+        this.inspector.classList.remove('hidden');
+        console.log('UI: Classes:', this.inspector.className);
+        document.getElementById('insp-type').style.color = `hsl(${data.dna.hue}, 100%, 70%)`;
+
+        // Growth Bar
+        const pct = Math.floor((data.growth / data.maxGrowth) * 100);
+        document.getElementById('insp-growth-bar').style.width = `${pct}%`;
+
+        // Matrix-style DNA dump
+        let dnaText = '';
+        dnaText += `HUE : ${data.dna.hue}°\n`;
+        dnaText += `TECH: ${data.dna.tech}\n`;
+        dnaText += `ALIN: ${data.dna.alien}\n`;
+        dnaText += `CHOS: ${data.dna.chaos}\n`;
+        dnaText += `SYM : ${data.dna.symmetry}\n`;
+        dnaText += `SPKS: ${data.dna.spikes}\n`;
+
+        document.getElementById('insp-dna').textContent = dnaText;
+    }
+
     runGhostDemo() {
         // Clear grid first
         window.dispatchEvent(new CustomEvent('clear-grid'));
@@ -274,7 +361,6 @@ export class UIManager {
         // Create a fake cursor
         const cursor = document.createElement('div');
         cursor.className = 'ghost-cursor';
-        // Start position
         cursor.style.transform = `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px)`;
         this.uiLayer.appendChild(cursor);
 
@@ -368,7 +454,7 @@ export class UIManager {
 
             // 5. Connect
             await moveCursor(sourceX, centerY, 500); // Back to source
-            await click(200); // Visual click
+            await click(200);
             await simulateDrag(sourceX, centerY, outputX, centerY);
 
             // Finish

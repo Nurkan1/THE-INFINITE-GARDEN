@@ -4,7 +4,13 @@
 
 "The Infinite Garden" is a sandbox experience where technology meets nature. It simulates a digital ecosystem where energy (packets) flows through logic gates, mutating flowers into unique "Tech" or "Alien" species based on the signal properties.
 
-## 🌟 New Features in v1.0.3 (Universal Update)
+## 🌟 New in v1.1.0 (Bio-Data Inspector)
+
+*   **👁️ Bio-Data Inspector**: Toggle the Inspector to analyze your flowers in real-time.
+    *   **Double-click** any Output Node (flower) to view its genetic makeup.
+    *   See growth progress, DNA traits (Tech, Alien, Chaos, Hue), symmetry, and spikiness.
+    *   Glassmorphism UI with animated scanning effects.
+*   **Enhanced UX**: Improved visual feedback and Inspector Mode toggle button.
 
 *   **Universal Connectivity**: Logic gates are no longer restrictive.
     *   **SYNC (AND)**: Acts as a **Tech-Mutagen**. It creates rigid, symmetrical, circuit-like flowers (Cyan/Green).
@@ -28,7 +34,7 @@
 
 ## 🛠️ Installation (Portable)
 
-1.  Download the latest release (`The Infinite Garden 1.0.3.exe`).
+1.  Download the latest release (`BitBloom-v1.1.0.AppImage` or `BitBloom-v1.1.0.exe`).
 2.  Run the executable. No installation required.
 3.  **Note**: A dedicated GPU is recommended for optimal performance due to heavy particle and fluid calculations.
 
@@ -39,6 +45,8 @@
 *   **Shift + Drag**: Move node clusters (Group Drag).
 *   **Ctrl + B**: Cycle Visual Styles.
 *   **Double-Click Source**: Auto-Connect.
+*   **👁️ Inspector**: Toggle Bio-Data Inspector.
+    *   **Double-Click Flowers**: Analyze DNA and growth data.
 
 ## 🔧 Development
 

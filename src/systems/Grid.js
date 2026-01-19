@@ -1,3 +1,5 @@
+import { Connection } from '../entities/Connection.js';
+
 export class Grid {
     constructor(cellSize = 40) {
         this.cellSize = cellSize;

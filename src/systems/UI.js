@@ -1,3 +1,5 @@
+import { CardGenerator } from './CardGenerator.js';
+
 export class UIManager {
     constructor() {
         this.app = document.getElementById('app');
@@ -38,6 +40,19 @@ export class UIManager {
                         </div>
                     </div>
                     <div id="system-iq" class="system-iq">System IQ: 0</div>
+                    
+                    <!-- TIG Wallet Display -->
+                    <div class="wallet-display" style="margin: 10px 0; padding: 10px; border-top: 1px solid rgba(0,255,255,0.2); border-bottom: 1px solid rgba(0,255,255,0.2);">
+                        <div class="tig-balance" style="font-size: 1.1em; color: #ffd700; font-weight: bold;">
+                            ⚡ <span id="tig-balance">0.00</span> TIG
+                        </div>
+                        <div class="tig-rank" style="font-size: 0.9em; color: #0ff; margin-top: 5px;">
+                            🏆 <span id="tig-rank">Seedling</span>
+                        </div>
+                        <button id="wallet-btn" class="tool-btn" style="margin-top: 8px; width: 100%; font-size: 0.85em;">
+                            💼 Wallet
+                        </button>
+                    </div>
                     
                     <div class="hud-controls-row">
                         <button id="help-btn" class="help-btn" title="Help">?</button>
@@ -168,6 +183,27 @@ export class UIManager {
                 }));
             });
         });
+
+        // EVENT DELEGATION for HUD clicks
+        // Handles Wallet button and potentially generic tool buttons
+        this.hud.addEventListener('click', (e) => {
+            // Wallet Button Handler
+            if (e.target.id === 'wallet-btn' || e.target.closest('#wallet-btn')) {
+                console.log('💼 Wallet button clicked (via delegation)!');
+                this.showWalletModal();
+                e.stopPropagation(); // Prevent other clicks
+            }
+        });
+
+        // Listen for TIG mining events
+        window.addEventListener('tig-mined', (e) => {
+            this.updateWalletDisplay(e.detail);
+        });
+
+        // Listen for rank up events
+        window.addEventListener('rank-up', (e) => {
+            this.showRankUpNotification(e.detail);
+        });
     }
 
     updateEnvironment(env) {
@@ -269,11 +305,19 @@ export class UIManager {
         modal.className = 'tutorial-overlay';
         modal.innerHTML = `
             <div class="tutorial-card help-modal" style="width: 600px; max-width: 90vw; display: flex; flex-direction: column; max-height: 90vh;">
-                <h2 style="border-bottom: 2px solid #0ff; padding-bottom: 10px; margin-bottom: 20px; flex-shrink: 0;">SYSTEM MANUAL v1.1.0</h2>
+                <h2 style="border-bottom: 2px solid #0ff; padding-bottom: 10px; margin-bottom: 20px; flex-shrink: 0;">SYSTEM MANUAL v1.2.0</h2>
                 
                 <div class="guide-content" style="text-align: left; overflow-y: auto; padding-right: 15px; flex-grow: 1;">
                     
-                    <h3 style="color: #0ff; margin-top: 10px;">🎮 Control Interface</h3>
+                    <h3 style="color: #ffd700; margin-top: 10px;">⚡ TIG ECONOMY (NEW)</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 8px;"><strong>Mining</strong>: Dead flowers decompose into <strong>0.01 TIG</strong>.</li>
+                        <li style="margin-bottom: 8px;"><strong>Ranks</strong>: Accumulate TIG to ascend from <em>Seedling</em> to <em>Infinite Gardener</em>.</li>
+                        <li style="margin-bottom: 8px;"><strong>Wallet</strong>: Persistent storage. Export/Import keys to move your wealth.</li>
+                        <li style="margin-bottom: 8px;"><strong>Identity</strong>: Generate your unique <strong>TIG ID Card</strong> with cryptographic signature.</li>
+                    </ul>
+
+                    <h3 style="color: #0ff; margin-top: 20px;">🎮 Control Interface</h3>
                     <ul style="list-style: none; padding: 0;">
                         <li style="margin-bottom: 8px;"><strong>Right Click</strong>: Instantiate Modules (Source, Logic, Output).</li>
                         <li style="margin-bottom: 8px;"><strong>Drag (L-Click)</strong>: Establish neural connections.</li>
@@ -353,6 +397,171 @@ export class UIManager {
 
         document.getElementById('insp-dna').textContent = dnaText;
     }
+
+    updateWalletDisplay(detail) {
+        const balanceEl = document.getElementById('tig-balance');
+        const rankEl = document.getElementById('tig-rank');
+
+        if (balanceEl && detail.balance !== undefined) {
+            balanceEl.textContent = detail.balance.toFixed(2);
+        }
+
+        if (window.walletManager && rankEl) {
+            const stats = window.walletManager.getStats();
+            rankEl.textContent = stats.rank.title;
+        }
+    }
+
+    showRankUpNotification(detail) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, rgba(0,255,255,0.2), rgba(255,215,0,0.2));
+            border: 2px solid #ffd700; padding: 30px; border-radius: 15px;
+            backdrop-filter: blur(10px); z-index: 10000; text-align: center;
+            animation: rankUpPop 0.5s ease-out forwards;
+        `;
+
+        notification.innerHTML = `
+            <div style="font-size: 3em;">🏆</div>
+            <div style="font-size: 1.5em; color: #ffd700; font-weight: bold;">RANK UP!</div>
+            <div style="font-size: 1.2em; color: #0ff;">${detail.newRank.title}</div>
+        `;
+
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+
+    showWalletModal() {
+        console.log('💼 showWalletModal called');
+        if (!window.walletManager) return;
+
+        const stats = window.walletManager.getStats();
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+
+        // Username input value
+        const currentName = stats.username || 'Anonymous Gardener';
+
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 500px;">
+                <h2 style="color: #ffd700; margin-bottom: 20px;">💼 TIG WALLET</h2>
+                
+                <!-- Username Section -->
+                <div style="margin-bottom: 20px;">
+                    <label style="color: #0ff; font-size: 0.8em; display: block; margin-bottom: 5px;">IDENTITY</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="wallet-username" value="${currentName}" 
+                            style="flex: 1; background: rgba(0,0,0,0.5); border: 1px solid #0ff; color: #fff; padding: 8px; border-radius: 5px;"
+                            placeholder="Enter your name">
+                        <button id="save-name-btn" style="padding: 8px 15px; background: rgba(0,255,255,0.2); border: 1px solid #0ff; color: #0ff; border-radius: 5px; cursor: pointer;">
+                            💾 Save
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <div style="font-size: 2em; color: #ffd700; font-weight: bold;">
+                        ⚡ ${stats.balance.toFixed(2)} TIG
+                    </div>
+                    <div style="color: #888; font-size: 0.9em;">
+                        Flowers: ${Math.floor(stats.totalFlowersMined).toLocaleString()}
+                    </div>
+                </div>
+
+                <div style="background: rgba(0,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <div style="font-size: 1.2em; color: #0ff;">
+                        🏆 ${stats.rank.title} (Rank ${stats.rank.level})
+                    </div>
+                </div>
+
+                <!-- ID Card Generator -->
+                <button id="generate-card-btn" style="width: 100%; padding: 15px; background: linear-gradient(90deg, #0ff, #00f); border: none; color: #fff; font-weight: bold; border-radius: 5px; cursor: pointer; margin-bottom: 20px; box-shadow: 0 0 15px rgba(0,255,255,0.3);">
+                    🪪 GENERATE ID CARD
+                </button>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button id="export-wallet-btn" style="flex: 1; padding: 12px; background: rgba(0,255,0,0.2); border: 1px solid #0f0; color: #0f0; border-radius: 5px; cursor: pointer;">
+                        📤 Export
+                    </button>
+                    <button id="import-wallet-btn" style="flex: 1; padding: 12px; background: rgba(0,255,255,0.2); border: 1px solid #0ff; color: #0ff; border-radius: 5px; cursor: pointer;">
+                        📥 Import
+                    </button>
+                </div>
+
+                <input type="file" id="wallet-file-input" accept=".tig" style="display: none;">
+
+                <button id="close-wallet-modal" style="width: 100%; padding: 12px; background: rgba(255,0,0,0.2); border: 1px solid #f00; color: #f00; border-radius: 5px; cursor: pointer;">
+                    Close
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event Listeners
+        document.getElementById('close-wallet-modal').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+
+        // Save Username
+        document.getElementById('save-name-btn').addEventListener('click', async () => {
+            const newName = document.getElementById('wallet-username').value;
+            await window.walletManager.setUsername(newName);
+            alert('✅ Name saved!');
+        });
+
+        // Generate Card
+        document.getElementById('generate-card-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('generate-card-btn');
+            btn.textContent = '⏳ Generating...';
+            try {
+                const generator = new CardGenerator();
+                const currentStats = window.walletManager.getStats();
+                const wallet = await window.walletManager.db.getWallet(); // Get raw data for hash
+
+                const dataUrl = await generator.generate(currentStats, wallet);
+
+                // Trigger download
+                const a = document.createElement('a');
+                a.href = dataUrl;
+                a.download = `TIG_ID_${currentStats.username.replace(/\s+/g, '_')}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                btn.textContent = '✅ Card Downloaded!';
+                setTimeout(() => btn.textContent = '🪪 GENERATE ID CARD', 2000);
+            } catch (err) {
+                console.error(err);
+                btn.textContent = '❌ Error';
+                alert('Generation failed');
+            }
+        });
+
+        document.getElementById('export-wallet-btn').addEventListener('click', async () => {
+            await window.walletManager.exportWallet();
+            alert('✅ Wallet exported!');
+        });
+
+        const fileInput = document.getElementById('wallet-file-input');
+        document.getElementById('import-wallet-btn').addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    await window.walletManager.importWallet(file);
+                    alert('✅ Wallet imported!');
+                    modal.remove();
+                    this.updateWalletDisplay({ balance: window.walletManager.balance });
+                } catch (error) {
+                    alert('❌ Import failed: ' + error.message);
+                }
+            }
+        });
+    }
+
+
 
     runGhostDemo() {
         // Clear grid first

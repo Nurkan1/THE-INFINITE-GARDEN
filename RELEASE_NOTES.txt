@@ -1,57 +1,32 @@
-THE INFINITE GARDEN - RELEASE NOTES
-===================================
-Version: 1.1.0 (Bio-Data Update)
-Date: 2026-01-19
-
+v1.2.0 - The TIG Economy Update
+-----------------------------------
 NEW FEATURES:
--------------
-1. Bio-Data Inspector:
-   - A professional Sci-Fi HUD panel to analyze your garden.
-   - Click the "Eye" icon to toggle Inspector Mode.
-   - Click on any Flower (Output Node) to view real-time DNA data.
-   - Displays Hue, Tech/Alien/Chaos traits, and Growth progress.
+[+] TIG Cryptocurrency System
+    - Simulated mining: 1 Dead Flower = 0.01 TIG
+    - Persistent Wallet using IndexedDB
+    - Secure Export/Import system with SHA-256 verification
+[+] Rank System
+    - 7 Ranks: Seedling, Gardener, Cultivator, Botanist, Horticulturist, Master Gardener, Infinite Gardener
+[+] Identity Card Generator
+    - Generate unique PNG ID cards with your stats and signature
+    - Customizable Username
+[+] UI Updates
+    - New Wallet HUD display
+    - Enhanced Help Manual with Economy details
+    - Rank Up notifications
 
-2. UI Improvements:
-   - Enhanced Help Modal with responsive design for smaller screens.
-   - Fixed layout issues and added version information.
+v1.1.0 - Bio-Data Inspector
+---------------------------
+[+] Bio-Data Inspector Panel
+    - Inspect DNA, Growth, and Mutation data
+    - Double-click activation on flowers
+[+] Improved Drag & Drop
+    - Conflict resolution between inspection and connection logic
+[+] Glassmorphism UI updates
 
-3. System:
-   - Optimized build process for Linux and Windows.
-
-____________________________________________________________________
-# v1.0.4: Platform Credits & Final Polish 🌸✨
-
-"The Infinite Garden" evolves into a truly universal ecosystem. This update unlocks the full potential of the logic gates, turning them into genetic modifiers that mutate the flora into "Tech" or "Alien" species.
-
-## 🌟 New Features (Universal Update)
-*   **Universal Neural Network**: Logic gates are no longer restrictive. They now accept single inputs and mix genetic traits.
-*   **Genetic Mutation System**:
-    *   **SYNC (AND) -> Tech Mutation 🦾**: Infuses energy with Order and Symmetry. Flowers become rigid, circuit-like, and glow in Cyan/Electric Green.
-    *   **ONE (XOR) -> Alien Mutation 👽**: Infuses energy with Chaos. Flowers become organic, tentacled, asymmetrical, and pulse in Ultraviolet/Magenta.
-*   **Professional UI**: New collapsible HUD (Pin/Unpin) for immersive viewing.
-*   **Credits**: Updated in-game help to credit **Nurcan Kerim** (Fullstack Developer & Visionary).
-
-## ✨ Core Features (Polished)
-*   **Connection Choreography (Dance Mode)**: Press `Ctrl + B` to cycle visuals:
-    *   🌿 **Organic**: Natural, swaying bezier vines.
-    *   🦾 **Tech**: Strict, rectilinear cyberpunk circuitry.
-    *   🌊 **Sine**: Oscillating data waves.
-    *   🌈 **Chaos**: High-entropy, rainbow-infused energy storms.
-*   **Visual Layering Fix**: Connection lines now render behind flowers for depth.
-*   **Hydro-Data Splash**: Energy packets create nourishing water particle splashes on impact.
-*   **Automated Gardener**: Double-click Source Nodes to auto-connect to nearby seeds.
-*   **Group Drag**: Hold `Shift + Drag` to move entire clusters.
-
-## 📦 Installation & Platforms
-
-This release supports both **Windows** and **Kali Linux**.
-
-### 🐧 For Kali Linux (and other distros)
-*   **File**: `The Infinite Garden-1.0.4.AppImage`
-*   **Instruction**: Download, mark as executable (chmod +x), and run!
-
-### 🪟 For Windows (x64)
-    2.  Run directly (Portable, no installation needed).
-
----
-*(C) 2026 BitBloom Dev - Created for Nurcan Kerim*
+v1.0.1 - Initial Release
+------------------------
+[+] Core procedural flower generation
+[+] Logic gate mutations (AND/OR/XOR)
+[+] 4 Visual Modes (Organic, Tech, Sine, Chaos)
+[+] Desktop builds for Linux & Windows

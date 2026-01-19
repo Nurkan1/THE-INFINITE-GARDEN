@@ -12,6 +12,7 @@ import { particleSystem } from './src/systems/ParticleSystem.js'
 import { DigitalRainSystem } from './src/systems/DigitalRain.js'
 import { FXManager } from './src/systems/FX.js'
 import { environment } from './src/systems/Environment.js'
+import { WalletManager } from './src/systems/WalletManager.js'
 
 console.log('BitBloom Initialized');
 
@@ -28,6 +29,22 @@ window.addEventListener('resize', () => {
 // Expose globally
 window.audioManager = audioManager;
 window.environment = environment;
+
+// Initialize TIG Wallet
+const walletManager = new WalletManager();
+walletManager.init().then(() => {
+    console.log('💰 TIG Wallet ready');
+    // Force UI update with saved data
+    if (window.uiManager) {
+        window.uiManager.updateWalletDisplay(walletManager.getStats());
+    }
+});
+window.walletManager = walletManager;
+
+// Listen for flower mining events
+window.addEventListener('flower-mined', () => {
+    walletManager.onFlowerMined();
+});
 
 const grid = new Grid(50); // 50px cell size
 window.grid = grid; // Expose for Effects
@@ -157,8 +174,6 @@ function handleInput() {
                     // START GROUP DRAG
                     dragCluster = grid.getCluster(nodeUnderMouse);
                     dragLastGridPos = gridPos;
-                    // Visual cue?
-                    console.log('Dragging cluster of size:', dragCluster.length);
                 } else {
                     // Start dragging from this node (Connect mode)
                     dragStartNode = nodeUnderMouse;

@@ -388,6 +388,14 @@ export class OutputNode extends Node {
     }
 
     releaseSeeds() {
+        // TIG MINING: Flower "dies" and releases seeds - emit mining event
+        window.dispatchEvent(new CustomEvent('flower-mined', {
+            detail: {
+                nodeId: `${this.gridX},${this.gridY}`,
+                dna: this.dna
+            }
+        }));
+
         this.pulse = 2.0;
         audioManager.playGrowSound();
         this.growthLevel = 0;

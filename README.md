@@ -4,10 +4,21 @@
 
 "The Infinite Garden" is a sandbox experience where technology meets nature. It simulates a digital ecosystem where energy (packets) flows through logic gates, mutating flowers into unique "Tech" or "Alien" species based on the signal properties.
 
-## 🌟 New in v1.1.0 (Bio-Data Inspector)
+## 🌟 New in v1.2.0 (The Infinite Garden Economy)
 
+*   **⚡ TIG Cryptocurrency Integration**:
+    *   **Simulated Economy**: Mine **TIG** (The Infinite Garden Token) by growing and harvesting digital life.
+    *   **Passive Mining**: Every flower that completes its life cycle generates 0.01 TIG.
+    *   **Persistent Wallet**: Your balance and rank are saved locally using IndexedDB.
+    *   **Import/Export**: Securely transfer your wallet (JSON + SHA-256 Hash) between devices.
+*   **🪪 Digital Identity System**:
+    *   **ID Card Generator**: Create professional, game-styled identity cards proving your Rank and Balance.
+    *   **Cryptographic Verification**: Cards include a verification hash and unique timestamp ID.
+    *   **Rank System**: Ascend through 7 tiers, from *Seedling* to *Infinite Gardener*.
 *   **👁️ Bio-Data Inspector**: Toggle the Inspector to analyze your flowers in real-time.
     *   **Double-click** any Output Node (flower) to view its genetic makeup.
+
+## 🌟 New in v1.1.0 (Bio-Data Inspector)
     *   See growth progress, DNA traits (Tech, Alien, Chaos, Hue), symmetry, and spikiness.
     *   Glassmorphism UI with animated scanning effects.
 *   **Enhanced UX**: Improved visual feedback and Inspector Mode toggle button.
@@ -47,6 +58,7 @@
 *   **Double-Click Source**: Auto-Connect.
 *   **👁️ Inspector**: Toggle Bio-Data Inspector.
     *   **Double-Click Flowers**: Analyze DNA and growth data.
+*   **💼 Wallet**: Manage TIG, View Rank, Generate ID Card.
 
 ## 🔧 Development
 

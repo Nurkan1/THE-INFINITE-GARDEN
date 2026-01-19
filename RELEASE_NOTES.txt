@@ -1,0 +1,42 @@
+# v1.0.3: Universal Connectivity & Cross-Platform Release 🌸🚀
+
+"The Infinite Garden" evolves into a truly universal ecosystem. This update unlocks the full potential of the logic gates, turning them into genetic modifiers that mutate the flora into "Tech" or "Alien" species.
+
+## 🌟 New Features (Universal Update)
+*   **Universal Neural Network**: Logic gates are no longer restrictive. They now accept single inputs and mix genetic traits.
+*   **Genetic Mutation System**:
+    *   **SYNC (AND) -> Tech Mutation 🦾**: Infuses energy with Order and Symmetry. Flowers become rigid, circuit-like, and glow in Cyan/Electric Green.
+    *   **ONE (XOR) -> Alien Mutation 👽**: Infuses energy with Chaos. Flowers become organic, tentacled, asymmetrical, and pulse in Ultraviolet/Magenta.
+*   **Professional UI**: New collapsible HUD (Pin/Unpin) for immersive viewing.
+*   **Credits**: Updated in-game help to credit **Nurcan Kerim** (Fullstack Developer & Visionary).
+
+## ✨ Core Features (Polished)
+*   **Connection Choreography (Dance Mode)**: Press `Ctrl + B` to cycle visuals:
+    *   🌿 **Organic**: Natural, swaying bezier vines.
+    *   🦾 **Tech**: Strict, rectilinear cyberpunk circuitry.
+    *   🌊 **Sine**: Oscillating data waves.
+    *   🌈 **Chaos**: High-entropy, rainbow-infused energy storms.
+*   **Visual Layering Fix**: Connection lines now render behind flowers for depth.
+*   **Hydro-Data Splash**: Energy packets create nourishing water particle splashes on impact.
+*   **Automated Gardener**: Double-click Source Nodes to auto-connect to nearby seeds.
+*   **Group Drag**: Hold `Shift + Drag` to move entire clusters.
+
+## 📦 Installation & Platforms
+
+This release supports both **Windows** and **Kali Linux**.
+
+### 🐧 For Kali Linux (and other distros)
+*   **File**: `The Infinite Garden-1.0.3.AppImage`
+*   **How to run**:
+    1.  Download the file.
+    2.  Right-click -> Properties -> Permissions -> **Allow executing file as program**.
+    3.  Double-click to play!
+
+### 🪟 For Windows (x64)
+*   **File**: `The Infinite Garden 1.0.3.exe`
+*   **How to run**:
+    1.  Download the `.exe`.
+    2.  Run directly (Portable, no installation needed).
+
+---
+*(C) 2026 BitBloom Dev - Created for Nurcan Kerim*

@@ -245,7 +245,11 @@ export class UIManager {
                     </p>
                 </div>
 
-                <div class="modal-actions" style="margin-top: 20px;">
+                <div class="modal-actions" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
+                    <div style="font-size: 0.8em; color: #888; margin-bottom: 15px;">
+                        <p><strong>Supported Platforms:</strong> Kali Linux (AppImage) • Windows 10/11 (Portable)</p>
+                        <p>Developed with ❤️ by <strong>Nurcan Kerim</strong></p>
+                    </div>
                     <button id="demo-btn">Run Diagnostics (Demo)</button>
                     <button id="close-help">System Ready</button>
                 </div>

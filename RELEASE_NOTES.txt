@@ -1,4 +1,4 @@
-# v1.0.3: Universal Connectivity & Cross-Platform Release 🌸🚀
+# v1.0.4: Platform Credits & Final Polish 🌸✨
 
 "The Infinite Garden" evolves into a truly universal ecosystem. This update unlocks the full potential of the logic gates, turning them into genetic modifiers that mutate the flora into "Tech" or "Alien" species.
 
@@ -26,16 +26,10 @@
 This release supports both **Windows** and **Kali Linux**.
 
 ### 🐧 For Kali Linux (and other distros)
-*   **File**: `The Infinite Garden-1.0.3.AppImage`
-*   **How to run**:
-    1.  Download the file.
-    2.  Right-click -> Properties -> Permissions -> **Allow executing file as program**.
-    3.  Double-click to play!
+*   **File**: `The Infinite Garden-1.0.4.AppImage`
+*   **Instruction**: Download, mark as executable (chmod +x), and run!
 
 ### 🪟 For Windows (x64)
-*   **File**: `The Infinite Garden 1.0.3.exe`
-*   **How to run**:
-    1.  Download the `.exe`.
     2.  Run directly (Portable, no installation needed).
 
 ---

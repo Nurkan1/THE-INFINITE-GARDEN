@@ -57,45 +57,130 @@ html {
     left: 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 0;
+    /* Gap handled by padding/margin internally now */
     pointer-events: auto;
-    background: rgba(10, 10, 15, 0.8);
+    background: rgba(10, 10, 15, 0.85);
+    /* Slightly more opaque */
     padding: 15px;
     border: 1px solid #0ff;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
+    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    width: 280px;
+    /* Increased from 200px to fit title */
+    overflow: hidden;
+    max-height: 800px;
 }
 
-.header h1 {
+.hud.minimized {
+    background: rgba(10, 10, 15, 0.6);
+    border-color: rgba(0, 255, 255, 0.5);
+    padding: 10px 15px;
+    max-height: 48px;
+    /* Tighter collapse */
+    width: 280px;
+    /* Maintain width so title doesn't jump */
+    min-width: auto;
+}
+
+.hud-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    transition: margin 0.4s;
+    width: 100%;
+    flex-wrap: nowrap;
+    /* Prevent wrapping */
+}
+
+.hud.minimized .header-top {
+    margin-bottom: 0;
+}
+
+.hud h1 {
     margin: 0;
-    font-size: 2rem;
+    font-size: 1.1rem;
+    /* Slightly smaller to ensure fit */
     font-weight: bold;
     color: #0ff;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    /* Take updated space */
 }
 
-.header .subtitle {
-    font-size: 0.8rem;
-    color: #f0f;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+#hud-toggle-btn {
+    background: rgba(0, 255, 255, 0.1);
+    /* Subtle background */
+    border: 1px solid #0ff;
+    border-radius: 4px;
+    /* Square/Rounded button look */
+    color: #0ff;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    /* Never shrink */
+    margin-left: 10px;
+}
+
+#hud-toggle-btn:hover {
+    background: #0ff;
+    color: #000;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px #0ff;
+}
+
+.hud-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    opacity: 1;
+    transition: opacity 0.3s 0.1s;
+    /* Slight delay on open */
+}
+
+/* Hide content when minimized */
+.hud.minimized .hud-content {
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    /* Keep layout but hide vis */
+    visibility: hidden;
+    /* Ensure no clicks */
+    transition: opacity 0.2s, visibility 0s 0.2s;
 }
 
 .stats {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    font-size: 1rem;
-    color: #fff;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    color: #ccc;
 }
 
 #objective {
     font-weight: bold;
     color: #fa0;
+    margin-top: 5px;
 }
 
 /* Environment Monitor */
@@ -104,12 +189,10 @@ html {
     border: 1px solid #333;
     padding: 8px;
     border-radius: 4px;
-    margin-top: 5px;
     font-size: 0.8rem;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    width: 140px;
 }
 
 .env-title {
@@ -154,80 +237,49 @@ html {
     font-weight: bold;
 }
 
-.controls button {
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid #0ff;
-    color: #0ff;
-    padding: 8px 16px;
+.hud-controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#clear-btn {
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #f55;
+    color: #f55;
+    padding: 5px 10px;
     cursor: pointer;
     font-family: inherit;
     text-transform: uppercase;
+    font-size: 0.8rem;
     transition: all 0.2s;
-    font-weight: bold;
-    box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
+    flex-grow: 1;
+    margin-right: 10px;
 }
 
-.controls button:hover {
-    background: #0ff;
+#clear-btn:hover {
+    background: #f55;
     color: #000;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
 }
 
+/* Tools Palette - Now integrated nicely */
 .tools-palette {
-    position: absolute;
-    top: 80px;
-    right: 20px;
-    bottom: auto;
-    left: auto;
+    /* Reset absolute positioning from previous version */
+    position: static;
     transform: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    pointer-events: auto;
-    background: rgba(10, 10, 15, 0.9);
-    padding: 15px;
-    border: 1px solid #0ff;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    max-height: 480px;
-    width: 140px;
-    overflow: hidden;
-}
-
-.tools-palette.collapsed {
-    max-height: 50px;
-    width: 60px;
-    padding: 5px;
-    background: rgba(0, 0, 0, 0.5);
-    border-color: #333;
-}
-
-.tools-palette.collapsed .tool-items {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#palette-toggle {
     background: transparent;
+    padding: 0;
     border: none;
-    color: #0ff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    align-self: flex-end;
-    /* Right align the toggle */
-    margin-bottom: 5px;
-    transition: transform 0.3s;
+    border-radius: 0;
+    backdrop-filter: none;
+    box-shadow: none;
     width: 100%;
 }
 
 .tool-items {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    transition: opacity 0.2s;
-    opacity: 1;
+    gap: 8px;
 }
 
 .tool-label {
@@ -236,33 +288,36 @@ html {
     font-size: 0.8rem;
     letter-spacing: 2px;
     margin-bottom: 5px;
-    margin-right: 0;
-    align-self: center;
     text-align: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
 }
 
 .tool-btn {
-    background: transparent;
-    border: 1px solid #333;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;
     color: #888;
-    padding: 10px 20px;
+    padding: 8px;
     cursor: pointer;
     font-family: inherit;
     font-weight: bold;
     transition: all 0.2s;
     text-transform: uppercase;
+    text-align: center;
+    font-size: 0.9rem;
 }
 
 .tool-btn:hover {
     border-color: #0ff;
     color: #fff;
+    background: rgba(0, 255, 255, 0.1);
 }
 
 .tool-btn.active {
     background: #0ff;
     color: #000;
     border-color: #0ff;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
 }
 
 /* Tutorial / Modal Overlay */

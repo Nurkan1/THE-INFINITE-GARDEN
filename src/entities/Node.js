@@ -131,12 +131,23 @@ export class LogicNode extends Node {
         this.gateType = gateType; // OR, AND, XOR
         this.packetBuffer = 0;
         this.processingFrame = 0;
-        this.PROCESS_DELAY = 15; // 15 frames (~250ms) window for simultaneous signals
+        this.PROCESS_DELAY = 15;
+
+        // Accumulate traits from incoming packets
+        this.traitBuffer = { tech: 0, alien: 0, chaos: 0, hue: 0 };
     }
 
     receivePacket(packet) {
         // Collect signals within a time window
         this.packetBuffer++;
+
+        // Mix traits
+        if (packet.traits) {
+            this.traitBuffer.tech += packet.traits.tech || 0;
+            this.traitBuffer.alien += packet.traits.alien || 0;
+            this.traitBuffer.chaos += packet.traits.chaos || 0;
+            this.traitBuffer.hue += packet.traits.hue || 0;
+        }
 
         // Start window if not active
         if (this.processingFrame <= 0) {
@@ -157,30 +168,44 @@ export class LogicNode extends Node {
             // Window closed, evaluate!
             if (this.processingFrame <= 0) {
                 this.evaluateLogic();
-                this.packetBuffer = 0; // Reset buffer
+                // Reset buffers
+                this.packetBuffer = 0;
+                this.traitBuffer = { tech: 0, alien: 0, chaos: 0, hue: 0 };
             }
         }
     }
 
     evaluateLogic() {
         let shouldEmit = false;
+        let outputTraits = { ...this.traitBuffer };
 
+        // Normalize accumulated traits? 
+        // Or just let them be strong. Let's cap them at 1.0 later or just pass them.
+        // We'll average them based on packet count for purity, or just add "Bonus".
+
+        // Base Logic Rules
         switch (this.gateType) {
             case 'OR':
                 shouldEmit = this.packetBuffer >= 1;
+                outputTraits.chaos += 0.2; // OR adds chaos
                 break;
             case 'AND':
-                shouldEmit = this.packetBuffer >= 2;
+                // RELAXED: Now emits on 1, but acts as a "Tech Filter"
+                shouldEmit = this.packetBuffer >= 1;
+                outputTraits.tech += 0.5; // AND strongly boosts Tech
+                outputTraits.chaos = 0; // AND cleans chaos
                 break;
             case 'XOR':
-                shouldEmit = this.packetBuffer === 1;
+                shouldEmit = this.packetBuffer >= 1; // Simplification for game feel
+                outputTraits.alien += 0.5; // XOR boosts Alien
+                outputTraits.hue += 20; // Shift hue
                 break;
         }
 
         if (shouldEmit) {
             // Success! Emit packets on all outgoing connections
             for (const conn of this.connections) {
-                conn.addPacket();
+                conn.addPacket(outputTraits);
             }
             // Visual feedback
             this.pulse = 1.0;
@@ -261,6 +286,8 @@ export class OutputNode extends Node {
                 spikiness: Math.random(), // 0.0 to 1.0
                 hue: Math.random() * 360, // 0 to 360
                 chaos: Math.random() * 0.5, // 0.0 to 0.5
+                tech: 0.0, // 0 to 1.0 (Circuitry)
+                alien: 0.0, // 0 to 1.0 (Hyper-structures)
                 branches: [] // Procedural structure
             };
         }
@@ -285,50 +312,78 @@ export class OutputNode extends Node {
             this.growthLevel++;
             if (this.growthLevel % 5 === 0) audioManager.playGrowSound();
 
-            // MUTATION based on Source
-            const sourceInfo = packet.connection ? packet.connection.fromNode : null;
-
-            if (sourceInfo) {
-                this.mutate(sourceInfo);
+            // MUTATION based on Packet payload
+            if (packet.traits) {
+                this.mutate(packet.traits);
             }
 
             this.pulse = 1.0;
 
-            // Water Splash Effect 💦
-            if (window.grid) {
-                // We need screen coordinates. 
-                // If window.grid is available. If not, we might need another way.
-                // Let's rely on global grid for now or calculate manually if cellSize is known (50).
-                const cellSize = 50;
-                const screenX = this.gridX * cellSize + cellSize / 2;
-                const screenY = this.gridY * cellSize + cellSize / 2;
+            // Water Splash / Spore Effect 💦
+            const cellSize = 50;
+            const screenX = this.gridX * cellSize + cellSize / 2;
+            const screenY = this.gridY * cellSize + cellSize / 2;
 
-                // Cyan/Blue Dust
-                particleSystem.emit(screenX, screenY, '#0ff', 5); // 5 particles
-                particleSystem.emit(screenX, screenY, '#8ff', 3); // 3 lighter mist
-            }
+            // Particle Color based on DNA
+            const pColor = `hsl(${this.dna.hue}, 80%, 60%)`;
+            particleSystem.emit(screenX, screenY, pColor, 5);
+
+            // Tech Sparks
+            if (this.dna.tech > 0.5) particleSystem.emit(screenX, screenY, '#fff', 2);
         } else {
             if (Math.random() < 0.3) this.releaseSeeds();
         }
     }
 
-    mutate(sourceNode) {
-        // Genetic Mutation Logic
-        if (sourceNode.type === 'source') {
-            // Pure Energy - random growth
-            this.dna.hue += 1;
-        } else if (sourceNode.type === 'logic') {
-            if (sourceNode.gateType === 'AND') { // SYNC -> Structure/Symmetry
-                if (Math.random() < 0.1) {
-                    this.dna.symmetry = Math.min(12, this.dna.symmetry + 1);
-                    this.dna.chaos = Math.max(0, this.dna.chaos - 0.05);
-                }
-            } else if (sourceNode.gateType === 'XOR') { // ONE -> Spikiness/Precision
-                this.dna.spikiness = Math.min(1, this.dna.spikiness + 0.01);
-                this.dna.hue += 5; // Shift color rapidly
-            } else if (sourceNode.gateType === 'OR') { // MERGE -> Chaos/Lushness
-                this.dna.chaos = Math.min(1, this.dna.chaos + 0.01);
+    mutate(traits) {
+        // Universal Mutation Logic
+        // Traits are {tech, alien, chaos, hue}
+
+        // 1. Tech Influence 🤖
+        if (traits.tech > 0) {
+            this.dna.tech = Math.min(1.0, this.dna.tech + traits.tech * 0.1);
+
+            // Tech drives towards Cyan (180)
+            if (this.dna.hue > 60 && this.dna.hue < 180) {
+                // Already green/cyan?
+            } else {
+                this.dna.hue = (this.dna.hue * 0.95 + 180 * 0.05);
             }
+
+            // Tech Ordering: Symmetry
+            if (Math.random() < 0.2 * traits.tech) {
+                const techSym = [4, 6, 8, 12];
+                this.dna.symmetry = techSym[Math.floor(Math.random() * techSym.length)];
+                this.dna.chaos = Math.max(0, this.dna.chaos - 0.1);
+            }
+        }
+
+        // 2. Alien Influence 👽
+        if (traits.alien > 0) {
+            this.dna.alien = Math.min(1.0, this.dna.alien + traits.alien * 0.1);
+
+            // Alien drives towards Magenta (300)
+            this.dna.hue = (this.dna.hue * 0.95 + 300 * 0.05);
+
+            this.dna.spikiness = Math.min(1, this.dna.spikiness + 0.05);
+            this.dna.chaos = Math.min(1, this.dna.chaos + 0.05);
+
+            if (Math.random() < 0.1 * traits.alien) {
+                const alienSym = [3, 5, 7, 9];
+                this.dna.symmetry = alienSym[Math.floor(Math.random() * alienSym.length)];
+            }
+        }
+
+        // 3. Chaos Influence 🌀
+        if (traits.chaos > 0) {
+            this.dna.chaos = Math.min(1, this.dna.chaos + 0.01);
+            this.dna.alien = Math.max(0, this.dna.alien - 0.01);
+            this.dna.tech = Math.max(0, this.dna.tech - 0.01);
+        }
+
+        // 4. Raw Energy Hue Shift
+        if (traits.hue) {
+            this.dna.hue += traits.hue;
         }
     }
 
@@ -338,7 +393,13 @@ export class OutputNode extends Node {
         this.growthLevel = 0;
         // Mutate slightly on rebirth
         this.dna.hue += (Math.random() - 0.5) * 30;
-        this.dna.symmetry = Math.max(3, Math.min(12, this.dna.symmetry + (Math.random() > 0.5 ? 1 : -1)));
+
+        // Inherit Tech/Alien traits strongly
+        // If very tech, lock symmetry
+        if (this.dna.tech < 0.5) {
+            this.dna.symmetry = Math.max(3, Math.min(12, this.dna.symmetry + (Math.random() > 0.5 ? 1 : -1)));
+        }
+
         this.regenerateStructure();
 
         window.dispatchEvent(new CustomEvent('spawn-node', {
@@ -411,13 +472,17 @@ export class OutputNode extends Node {
         const time = performance.now() / 1000;
         const spokes = this.dna.symmetry;
         const spike = this.dna.spikiness;
+        const tech = this.dna.tech || 0;
+        const alien = this.dna.alien || 0;
 
         // Wind Effect
         const envWind = window.environment ? window.environment.getWindAt(this.gridX, this.gridY) : { x: 0, y: 0 };
-        const sway = Math.sin(time + this.gridX) * 0.1 * (1 - spike) + (envWind.x * 0.1);
+        // Tech nodes are rigid, don't sway much
+        const rigidity = tech > 0.5 ? 0.1 : 1.0;
+        const sway = (Math.sin(time + this.gridX) * 0.1 * (1 - spike) + (envWind.x * 0.1)) * rigidity;
 
         ctx.lineWidth = 2;
-        ctx.lineCap = spike > 0.5 ? 'butt' : 'round';
+        ctx.lineCap = spike > 0.5 || tech > 0.3 ? 'butt' : 'round';
         ctx.strokeStyle = `hsl(${hue}, 80%, 60%)`;
 
         for (let i = 0; i < spokes; i++) {
@@ -425,34 +490,80 @@ export class OutputNode extends Node {
             const angle = (Math.PI * 2 / spokes) * i + sway;
             ctx.rotate(angle);
 
-            // Draw Petal/Spike
+            // Draw Petal/Spike/Circuit
             ctx.beginPath();
             ctx.moveTo(0, 0);
 
             const len = 20 * progress;
             const width = 5 + (1 - spike) * 10;
 
-            // Bezier Petal vs Line Spike
-            if (spike > 0.7) {
-                // Sharp Crystal
-                ctx.lineTo(0, -len);
-                ctx.lineTo(width / 2, -len * 0.8);
-                ctx.lineTo(0, 0);
+            if (tech > 0.5) {
+                // 🤖 TECH STYLE: Circuit Trace
+                // 90 degree bends
+                ctx.lineTo(0, -len * 0.5);
+                ctx.lineTo(width, -len * 0.5);
+                ctx.lineTo(width, -len);
+
+                if (progress > 0.8) {
+                    // Terminal pad
+                    ctx.rect(width - 2, -len - 4, 4, 4);
+                }
+            } else if (alien > 0.5) {
+                // 👽 ALIEN STYLE: Tentacle / Arc
+                // Asymmetric curve
+                ctx.bezierCurveTo(width * 2, -len * 0.3, -width, -len * 0.8, 0, -len);
+
+                // Pulsing bulb
+                if (progress > 0.6) {
+                    const bulbSize = 2 + Math.sin(time * 5 + i) * 1;
+                    ctx.arc(0, -len, bulbSize, 0, Math.PI * 2);
+                }
             } else {
-                // Organic Petal
-                ctx.quadraticCurveTo(width, -len / 2, 0, -len);
-                ctx.quadraticCurveTo(-width, -len / 2, 0, 0);
+                // 🌿 ORGANIC STYLE (Default)
+                // Bezier Petal vs Line Spike
+                if (spike > 0.7) {
+                    // Sharp Crystal
+                    ctx.lineTo(0, -len);
+                    ctx.lineTo(width / 2, -len * 0.8);
+                    ctx.lineTo(0, 0);
+                } else {
+                    // Organic Petal
+                    ctx.quadraticCurveTo(width, -len / 2, 0, -len);
+                    ctx.quadraticCurveTo(-width, -len / 2, 0, 0);
+                }
             }
 
             // Fill if advanced
             if (progress > 0.5) {
-                ctx.fillStyle = `hsla(${hue}, 70%, 50%, 0.5)`;
-                ctx.fill();
+                const alpha = tech > 0.5 ? 0.8 : 0.5;
+                ctx.fillStyle = `hsla(${hue}, 70%, 50%, ${alpha})`;
+                // Tech is hollow/wireframe usually, but we fill for visibility
+                if (tech < 0.8) ctx.fill();
             }
             ctx.stroke();
 
-            // Recursion / Compexity based on Chaos
-            if (this.dna.chaos > 0.2 && progress > 0.3) {
+            // Recursion / Compexity
+            // Tech: Sub-traces
+            if (tech > 0.7 && progress > 0.5) {
+                ctx.beginPath();
+                ctx.moveTo(0, -len * 0.2);
+                ctx.lineTo(-width, -len * 0.2);
+                ctx.lineTo(-width, -len * 0.6);
+                ctx.stroke();
+            }
+
+            // Alien: Recursive Tendrils
+            if (this.dna.chaos > 0.2 && progress > 0.3 && alien > 0.3) {
+                ctx.translate(0, -len);
+                ctx.rotate(0.5 + Math.sin(time) * 0.2);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(5, -5, -5, -10, 0, -len * 0.4);
+                ctx.stroke();
+            }
+
+            // Organic Chaos
+            if (this.dna.chaos > 0.2 && progress > 0.3 && tech < 0.3 && alien < 0.3) {
                 ctx.translate(0, -len);
                 ctx.rotate(0.5);
                 ctx.beginPath();
@@ -466,8 +577,13 @@ export class OutputNode extends Node {
 
         // Center Core
         ctx.beginPath();
-        ctx.fillStyle = '#fff';
-        ctx.arc(0, 0, 3 + progress * 2, 0, Math.PI * 2);
+        ctx.fillStyle = tech > 0.5 ? '#0ff' : '#fff'; // Tech core is Cyan
+        // Tech core is square
+        if (tech > 0.5) {
+            ctx.rect(-(3 + progress * 2) / 2, -(3 + progress * 2) / 2, 3 + progress * 2, 3 + progress * 2);
+        } else {
+            ctx.arc(0, 0, 3 + progress * 2, 0, Math.PI * 2);
+        }
         ctx.fill();
     }
 }

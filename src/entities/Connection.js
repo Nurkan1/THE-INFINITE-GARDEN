@@ -7,8 +7,8 @@ export class Connection {
         this.packets = []; // Packets traveling on this connection
     }
 
-    addPacket() {
-        this.packets.push(new Packet(this));
+    addPacket(traits = {}) {
+        this.packets.push(new Packet(this, traits));
     }
 
     update(deltaTime) {

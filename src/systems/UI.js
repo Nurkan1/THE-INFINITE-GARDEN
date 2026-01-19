@@ -11,65 +11,98 @@ export class UIManager {
         this.hud.className = 'hud';
         this.hud.innerHTML = `
             <div class="hud-header">
-                <h1>THE INFINITE GARDEN</h1>
-                <div class="stats">
-                    <span id="node-count">Nodes: 0</span>
-                    <span id="connection-count">Links: 0</span>
-                    <span id="objective">Plant seeds...</span>
+                <div class="header-top">
+                    <h1>THE INFINITE GARDEN</h1>
+                    <button id="hud-toggle-btn" class="icon-btn" title="Minimize/Pin">✖</button>
                 </div>
-                <div class="env-monitor">
-                    <div class="env-title">BIOSCAN</div>
-                    <div class="monitor-row">
-                        <span>TEMP</span>
-                        <div class="bar-container">
-                            <div id="temp-bar" class="bar-fill" style="width: 50%;"></div>
+                <div class="hud-content">
+                    <div class="stats">
+                        <span id="node-count">Nodes: 0</span>
+                        <span id="connection-count">Links: 0</span>
+                        <span id="objective">Plant seeds...</span>
+                    </div>
+                    <div class="env-monitor">
+                        <div class="env-title">BIOSCAN</div>
+                        <div class="monitor-row">
+                            <span>TEMP</span>
+                            <div class="bar-container">
+                                <div id="temp-bar" class="bar-fill" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div class="monitor-row">
+                            <span>WIND</span>
+                            <div class="wind-display">
+                                <span id="wind-arrow" class="wind-arrow">➤</span>
+                                <span id="wind-val">0</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="monitor-row">
-                        <span>WIND</span>
-                        <div class="wind-display">
-                            <span id="wind-arrow" class="wind-arrow">➤</span>
-                            <span id="wind-val">0</span>
+                    <div id="system-iq" class="system-iq">System IQ: 0</div>
+                    
+                    <div class="hud-controls-row">
+                        <button id="help-btn" class="help-btn">?</button>
+                        <button id="clear-btn">Clear Grid</button>
+                    </div>
+
+                    <div class="tools-palette">
+                        <div class="tool-items">
+                            <div class="tool-label">TOOLS</div>
+                            <button class="tool-btn active" data-tool="source">SOURCE</button>
+                            <button class="tool-btn" data-tool="or">MERGE</button>
+                            <button class="tool-btn" data-tool="and">SYNC</button>
+                            <button class="tool-btn" data-tool="xor">ONE</button>
+                            <button class="tool-btn" data-tool="output">OUTPUT</button>
                         </div>
                     </div>
-                </div>
-                <div id="system-iq" class="system-iq">System IQ: 0</div>
-            </div>
-            <button id="help-btn" class="help-btn">?</button>
-            <div class="controls">
-                <button id="clear-btn">Clear Grid</button>
-            </div>
-            <div class="tools-palette">
-                <button id="palette-toggle" title="Toggle Menu">☰</button>
-                <div class="tool-items">
-                    <div class="tool-label">TOOLS</div>
-                    <button class="tool-btn active" data-tool="source">SOURCE</button>
-                    <button class="tool-btn" data-tool="or">MERGE</button>
-                    <button class="tool-btn" data-tool="and">SYNC</button>
-                    <button class="tool-btn" data-tool="xor">ONE</button>
-                    <button class="tool-btn" data-tool="output">OUTPUT</button>
                 </div>
             </div>
         `;
         this.uiLayer.appendChild(this.hud);
 
+        this.pinned = true; // Default state
         this.attachListeners();
     }
 
     attachListeners() {
+        // HUD Toggle Logic
+        const toggleBtn = document.getElementById('hud-toggle-btn');
+        const hudContent = this.hud.querySelector('.hud-content');
+
+        // 1. Click Toggle (Pin/Unpin)
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent bubble
+            this.pinned = !this.pinned;
+
+            if (this.pinned) {
+                this.hud.classList.remove('minimized');
+                toggleBtn.textContent = '✖'; // Close icon
+                toggleBtn.title = "Minimize Panel";
+            } else {
+                this.hud.classList.add('minimized');
+                toggleBtn.textContent = '📌'; // Pin icon
+                toggleBtn.title = "Pin Panel Open";
+            }
+        });
+
+        // 2. Hover Logic (Only works if NOT pinned)
+        this.hud.addEventListener('mouseenter', () => {
+            if (!this.pinned) {
+                this.hud.classList.remove('minimized');
+            }
+        });
+
+        this.hud.addEventListener('mouseleave', () => {
+            if (!this.pinned) {
+                this.hud.classList.add('minimized');
+            }
+        });
+
         document.getElementById('clear-btn').addEventListener('click', () => {
             window.dispatchEvent(new CustomEvent('clear-grid'));
         });
 
         document.getElementById('help-btn').addEventListener('click', () => {
             this.showHelpModal();
-        });
-
-        const palette = this.hud.querySelector('.tools-palette');
-        const toggleBtn = document.getElementById('palette-toggle');
-        toggleBtn.addEventListener('click', () => {
-            palette.classList.toggle('collapsed');
-            toggleBtn.textContent = palette.classList.contains('collapsed') ? '🛠️' : '☰';
         });
 
         const toolBtns = this.hud.querySelectorAll('.tool-btn');

@@ -1,12 +1,21 @@
-# The Infinite Garden 🌸
+# The Infinite Garden - Professional Edition 🌸✨
 
 **A Procedural Cyber-Zen Ecosystem simulation.**
 
-"The Infinite Garden" is a sandbox experience where technology meets nature. There is no end, only growth. Nurture a digital ecosystem that evolves, blooms, and spreads across the screen, powered by cellular automata and procedural generation.
+"The Infinite Garden" is a sandbox experience where technology meets nature. It simulates a digital ecosystem where energy (packets) flows through logic gates, mutating flowers into unique "Tech" or "Alien" species based on the signal properties.
+
+## 🌟 New Features in v1.0.3 (Universal Update)
+
+*   **Universal Connectivity**: Logic gates are no longer restrictive.
+    *   **SYNC (AND)**: Acts as a **Tech-Mutagen**. It creates rigid, symmetrical, circuit-like flowers (Cyan/Green).
+    *   **ONE (XOR)**: Acts as an **Alien-Mutagen**. It creates organic, tentacled, asymmetrical flowers (Violet/Magenta).
+    *   **MERGE (OR)**: Promotes wild, lush growth.
+    *   **Hybridization**: Chain different logic gates to create complex hybrids (e.g., Connected Alien Circuits).
+*   **Professional UI**: Collapsible HUD for immersive viewing.
+*   **Digital Flux**: dynamic cursor trails and living grid background.
 
 ## 🎮 Key Features
 
-*   **Cyber-Nature Fusion:** Cultivate "Output Nodes" (Flowers) that inherit DNA and traits from purely logical signal inputs.
 *   **Procedural Xenobiology:** Every flower is unique, generated via fractal algorithms based on "genetic" data passed through the network.
 *   **Living Connections:** Neural links that sway with the wind and pulse with energy.
 *   **Visual Choreography (Dance Modes):** Press `Ctrl+B` to switch between:
@@ -19,7 +28,7 @@
 
 ## 🛠️ Installation (Portable)
 
-1.  Download the latest release (`The Infinite Garden 1.0.2.exe`).
+1.  Download the latest release (`The Infinite Garden 1.0.3.exe`).
 2.  Run the executable. No installation required.
 3.  **Note**: A dedicated GPU is recommended for optimal performance due to heavy particle and fluid calculations.
 
@@ -48,10 +57,13 @@ npm install
 # Run development server
 npm run dev
 
-# Build for Windows (Portable)
-npm run build:win
+# Build for Linux (AppImage)
+npm run build:linux
 ```
 
-## 📄 License
+## 📄 Credits
+
+**Created for Nurcan Kerim**
+*Fullstack Developer & Visionary*
 
 (C) 2026 BitBloom Dev. All Rights Reserved.

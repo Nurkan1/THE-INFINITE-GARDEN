@@ -249,10 +249,25 @@ export class Grid {
         }
 
         // Draw dots at intersections for a more "tech" feel
-        ctx.fillStyle = '#222';
+        const time = performance.now() / 1000;
+
         for (let x = 0; x <= width; x += this.cellSize) {
             for (let y = 0; y <= height; y += this.cellSize) {
-                ctx.fillRect(x - 1, y - 1, 2, 2);
+                // Shimmer Effect
+                const wave = Math.sin(x * 0.05 + y * 0.05 + time) * 0.5 + 0.5;
+                const alpha = 0.1 + wave * 0.2; // Base 0.1, up to 0.3
+
+                ctx.fillStyle = `rgba(34, 34, 34, ${alpha * 2})`; // Simulating brightness
+
+                // Occasional bright glint
+                if (Math.random() < 0.0005) {
+                    ctx.fillStyle = '#fff';
+                    ctx.globalAlpha = 0.5;
+                    ctx.fillRect(x - 1, y - 1, 3, 3);
+                    ctx.globalAlpha = 1.0;
+                } else {
+                    ctx.fillRect(x - 1, y - 1, 2, 2);
+                }
             }
         }
 

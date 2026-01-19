@@ -1,9 +1,17 @@
 export class Packet {
-    constructor(connection) {
+    constructor(connection, traits = {}) {
         this.connection = connection;
         this.progress = 0; // 0 to 1
         this.speed = 2.0; // Units per second (1 unit = full connection length)
         this.active = true;
+
+        // Genetic Payload
+        this.traits = {
+            tech: traits.tech || 0,
+            alien: traits.alien || 0,
+            chaos: traits.chaos || 0,
+            hull: traits.hue || 0 // Hue offset
+        };
     }
 
     update(deltaTime) {

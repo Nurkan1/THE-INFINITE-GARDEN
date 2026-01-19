@@ -131,13 +131,22 @@ function handleInput() {
     const gridPos = grid.screenToGrid(mousePos.x, mousePos.y);
     const nodeUnderMouse = grid.getNode(gridPos.x, gridPos.y);
 
-    // Pollen Trail
+    // Digital Flux Trail
     // mousePos is already defined at top of function
-    if (Math.random() < 0.3) {
-        // Random cyan/magenta dust
-        const color = Math.random() > 0.5 ? '#0ff' : '#f0f';
+
+    // Determine color based on tool or default
+    let trailColor = '#0ff';
+    if (currentTool === 'output') trailColor = '#fa0';
+    else if (currentTool === 'or' || currentTool === 'and') trailColor = '#f0f';
+    else if (currentTool === 'xor') trailColor = '#fff';
+
+    if (Math.random() < 0.8) { // Denser trail
         // Tiny particle, short life
-        particleSystem.emit(mousePos.x, mousePos.y, color, 1);
+        particleSystem.emit(mousePos.x, mousePos.y, trailColor, 1);
+    }
+    // Occasional sparkle
+    if (Math.random() < 0.05) {
+        particleSystem.emit(mousePos.x, mousePos.y, '#fff', 1);
     }
 
     if (inputHandler.isMouseDown) {

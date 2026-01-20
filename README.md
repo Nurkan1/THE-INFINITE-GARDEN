@@ -2,11 +2,13 @@
 
 > **v1.2.0 | A Procedural Cyber-Zen Ecosystem Simulation**
 
+<img width="1919" height="890" alt="Captura de pantalla 2026-01-20 102228" src="https://github.com/user-attachments/assets/dba92df6-b0d9-43f8-a473-a0f35a040d93" />
 ![Badge](https://img.shields.io/badge/Version-1.2.0-cyan?style=flat-square)
 ![Badge](https://img.shields.io/badge/Engine-Vanilla_JS-yellow?style=flat-square)
 ![Badge](https://img.shields.io/badge/Build-Electron-blue?style=flat-square)
 
-**The Infinite Garden** is a sandbox experience where technology meets nature. It simulates a digital ecosystem where energy (packets) flows through logic gates, mutating flowers into unique "Tech" or "Alien" species based on signal properties.
+**The Infinite Garden** is ![Uploading Captura de pantalla 2026-01-20 102228.png…]()
+a sandbox experience where technology meets nature. It simulates a digital ecosystem where energy (packets) flows through logic gates, mutating flowers into unique "Tech" or "Alien" species based on signal properties.
 
 ---
 
@@ -17,7 +19,7 @@ We have introduced a simulated economy and a persistent progression system. You 
 ### ⚡ TIG Economy (Simulated)
 * **Mining:** Dead flowers decompose into **0.01 TIG** (The Infinite Garden Token).
 * **Ranks:** Accumulate TIG to ascend from *Seedling* to *Infinite Gardener*.
-* **Wallet:** Persistent storage using IndexedDB. 
+* **Wallet:** Persistent storage using IndexedDB.
 * **Import/Export:** Securely move your wealth between devices using keys.
 
 ### 🪪 Digital Identity System
@@ -83,5 +85,3 @@ npm run build
 
 # Build for Linux (AppImage)
 npm run build:linux
-
-

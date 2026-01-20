@@ -14,39 +14,46 @@
 
 We have introduced a simulated economy and a persistent progression system. You are no longer just an observer; you are an **Infinite Gardener**.
 
-### ⚡ TIG Cryptocurrency Integration (Simulated)
-* **Passive Mining:** Every flower that completes its life cycle successfully generates **0.01 TIG** (The Infinite Garden Token).
-* **Persistent Wallet:** Your balance and rank are saved locally using **IndexedDB**.
-* **Secure Import/Export:** Transfer your wallet between devices using a JSON file + SHA-256 Hash verification system.
+### ⚡ TIG Economy (Simulated)
+* **Mining:** Dead flowers decompose into **0.01 TIG** (The Infinite Garden Token).
+* **Ranks:** Accumulate TIG to ascend from *Seedling* to *Infinite Gardener*.
+* **Wallet:** Persistent storage using IndexedDB. 
+* **Import/Export:** Securely move your wealth between devices using keys.
 
 ### 🪪 Digital Identity System
 * **ID Card Generator:** Generate a professional, game-styled identity card that proves your **Rank** and **Balance**.
 * **Cryptographic Verification:** Every card includes a verification hash and a unique timestamp ID.
-* **Rank System:** Ascend through **7 tiers**, from *Seedling* to *Infinite Gardener*.
 
 ### 🧬 Logic Gates as Mutagens
 Logic gates now influence the "genetic" makeup of your garden:
 * **SYNC (AND):** Acts as a **Tech-Mutagen**. Forces growth into rigid, symmetrical, circuit-like flowers (Cyan/Green).
 * **ONE (XOR):** Acts as an **Alien-Mutagen**. Forces growth into organic, tentacled, asymmetrical flowers (Violet/Magenta).
 * **MERGE (OR):** Promotes wild, lush, and standard growth.
-* **Hybridization:** Chain different gates to create complex "Alien-Circuit" hybrids.
 
 ---
 
 ## 🌟 Key Features
 
-* **Procedural Xenobiology:** Every flower is unique, generated via fractal algorithms based on "genetic" data passed through the network.
-* **Bio-Data Inspector:** Toggle the Inspector to analyze growth progress, DNA traits (Tech, Alien, Chaos, Hue), symmetry, and spikiness in real-time.
+* **Procedural Xenobiology:** Source Nodes provide raw energy (Hydro-Data). Output Nodes (Flowers) possess unique DNA that determines their fractal structure and color.
+* **Bio-Data Inspector:** Toggle the Inspector to analyze growth progress, DNA traits, symmetry, and spikiness in real-time.
 * **Living Connections:** Neural links that sway with the wind and pulse with energy.
-* **Digital Flux:** Dynamic cursor trails and a living grid background that reacts to the ecosystem.
-* **Automated Gardener:** Double-click Source nodes to auto-connect to nearby seeds instantly.
+* **Visual Choreography (Dance Modes):** Press `Ctrl+B` to switch between Organic, Tech, Sine, and Chaos rendering styles.
 
-### 🎨 Visual Choreography (Dance Modes)
-Press `Ctrl+B` to switch between rendering algorithms:
-1.  **Organic:** Natural, bezier vines.
-2.  **Tech:** Cyberpunk, rectilinear circuitry ("Manhattan" style).
-3.  **Sine:** Oscillating waveforms.
-4.  **Chaos:** High-entropy rainbow storms.
+---
+
+## 💻 Control Interface
+
+| Action | Input / Command |
+| :--- | :--- |
+| **Open Build Menu** | `Right Click` (on empty background) |
+| **Delete / Prune Object** | `Right Click` (directly on a Node/Object) |
+| **Connect Nodes** | `Left Click + Drag` (from port to port) |
+| **Move Object / Cluster** | `Shift + Left Click + Drag` (Hold Shift, Click Object & Move) |
+| **Auto-Connect** | `Double-Click` on a Source Node |
+| **Inspect DNA** | `Double-Click` on a Flower (Output Node) |
+| **Cycle Visual Style** | `Ctrl + B` |
+| **Wallet / ID Card** | Click the `💼 Wallet` icon in the HUD |
+| **Toggle Inspector** | Click the `👁️ Eye` icon in the HUD |
 
 ---
 
@@ -56,22 +63,7 @@ No installation required. This is a portable application.
 
 1.  Download the latest release for your OS (e.g., `TheInfiniteGarden-v1.2.0.exe` or `.AppImage`).
 2.  Run the executable.
-3.  *Note: A dedicated GPU is recommended for optimal performance due to heavy particle and fluid calculations.*
-
----
-
-## 💻 Controls
-
-| Action | Command |
-| :--- | :--- |
-| **Open Build Menu** | `Right Click` (Select Source / Merge / Sync / One / Output) |
-| **Connect Nodes** | `Left Drag` |
-| **Move Clusters** | `Shift + Drag` (Group Drag) |
-| **Auto-Connect** | `Double-Click` on a Source Node |
-| **Inspect DNA** | `Double-Click` on a Flower (Output Node) |
-| **Cycle Visual Style** | `Ctrl + B` |
-| **Wallet / ID Card** | Click the `💼 Wallet` icon in the HUD |
-| **Toggle Inspector** | Click the `👁️ Eye` icon in the HUD |
+3.  *⚠️ **Performance Notice:** A dedicated GPU is recommended for optimal performance due to heavy particle, fluid dynamics, and fractal geometry calculations.*
 
 ---
 

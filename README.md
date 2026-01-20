@@ -84,5 +84,4 @@ npm run build
 # Build for Linux (AppImage)
 npm run build:linux
 
-![Infinite Garden Banner](<img width="1919" height="890" alt="Captura de pantalla 2026-01-20 102228" src="https://github.com/user-attachments/assets/3c4093af-f640-4eaa-927c-6ab6a1d986a8" />)
 
